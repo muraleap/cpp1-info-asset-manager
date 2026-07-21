@@ -16,7 +16,20 @@ with app.app_context():
         CREATE TABLE IF NOT EXISTS books (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            author TEXT NOT NULL
+            author TEXT NOT NULL,
+            bureau TEXT NOT NULL,
+            
+            user TEXT NOT NULL,
+            contact TEXT NOT NULL,
+            media TEXT NOT NULL,
+            
+            risk INTEGER NOT NULL,
+            c INTEGER NOT NULL,
+            i INTEGER NOT NULL,
+            a INTEGER NOT NULL,
+
+            expire TEXT NOT NULL,
+            registered TEXT NOT NULL,
         )
     ''')
     conn.commit()
@@ -28,8 +41,21 @@ def add_book():
     if request.method == 'POST':
         title = request.form['title']
         author = request.form['author']
+        bureau = request.form['bureau']
+
+        user = request.form['user']
+        contact = request.form['contact']
+        media = request.form['media']
+
+        risk = request.form['risk']
+        c = request.form['c']
+        i = request.form['i']
+        a = request.form['a']
+        expire = request.form['expire']
+        registered = request.form['registered']
+
         conn = get_db_connection()
-        conn.execute('INSERT INTO books (title, author) VALUES (?, ?)', (title, author))
+        conn.execute('INSERT INTO books (title, author, bureau, user, contact, media, risk, c, i, a, expire, registered) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (title, author, bureau, user, contact, media, risk, c, i, a, expire, registered))
         conn.commit()
         conn.close()
         return redirect('/books')

@@ -14,6 +14,19 @@
                 <tr>
                     <th>情報資産名</th>
                     <th>管理担当者名</th>
+                    <th>管理部署名</th>
+
+                    <th>利用者範囲</th>
+                    <th>管理部署</th>
+                    <th>管理部署名</th>
+                    
+                    <th>リスク値</th>
+                    <th>機密性</th>
+                    <th>完全性</th>
+                    <th>可用性</th>
+                    <th>管理部署名</th>
+                    <th>管理部署名</th>
+
                     <th>操作</th>
                 </tr>
             </thead>
@@ -22,6 +35,11 @@
                 <tr>
                     <td>{{ book.title }}</td>
                     <td>{{ book.author }}</td>
+                    <td>{{ book.bureau }}</td>
+                    <td>{{ book.risk }}</td>
+                    <td>{{ book.c }}</td>
+                    <td>{{ book.i }}</td>
+                    <td>{{ book.a }}</td>
                     <td>
                         <form action="/delete-book/{{ book.id }}" method="POST" style="display:inline;">
                             <button type="submit" class="delete-button">Delete</button>
