@@ -1,6 +1,7 @@
 FROM python:3
 RUN mkdir /app
 WORKDIR /app
+VOLUME /app
 COPY requirements.txt /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt

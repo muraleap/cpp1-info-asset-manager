@@ -8,7 +8,7 @@ body {
 
 .container {
     width: 90%;
-    max-width: 800px;
+    /* max-width: 90%; */
     margin: 50px auto;
     background-color: #fff;
     border-radius: 10px;
@@ -55,6 +55,10 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.table-wrapper {
+    overflow-x: auto;
 }
 
 /* リストテーブルのスタイル */

@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # データベース接続関数
 def get_db_connection():
-    conn = sqlite3.connect('books.db')
+    conn = sqlite3.connect('book.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -13,70 +13,76 @@ def get_db_connection():
 with app.app_context():
     conn = get_db_connection()
     conn.execute('''
-        CREATE TABLE IF NOT EXISTS books (
+        CREATE TABLE IF NOT EXISTS book (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            author TEXT NOT NULL,
-            bureau TEXT NOT NULL,
-            
+            category TEXT NOT NULL,
+            name TEXT NOT NULL,
+            note TEXT,
             user TEXT NOT NULL,
+            bureau TEXT NOT NULL,
+            charge TEXT NOT NULL,
             contact TEXT NOT NULL,
             media TEXT NOT NULL,
-            
-            risk INTEGER NOT NULL,
+        
+            importance INTEGER NOT NULL,
             c INTEGER NOT NULL,
             i INTEGER NOT NULL,
             a INTEGER NOT NULL,
 
             expire TEXT NOT NULL,
-            registered TEXT NOT NULL,
+            registered TEXT NOT NULL
         )
     ''')
     conn.commit()
     conn.close()
 
-# 本の追加画面
-@app.route('/add-book', methods=['GET', 'POST'])
+# 追加画面
+@app.route('/add-asset', methods=['GET', 'POST'])
 def add_book():
     if request.method == 'POST':
-        title = request.form['title']
-        author = request.form['author']
-        bureau = request.form['bureau']
-
+        #追加内容
+        category = request.form['category']
+        name = request.form['name']
+        note = request.form['note']
         user = request.form['user']
+
+        bureau = request.form['bureau']
+        charge = request.form['charge']
         contact = request.form['contact']
         media = request.form['media']
 
-        risk = request.form['risk']
+        importance = request.form['importance']
         c = request.form['c']
         i = request.form['i']
         a = request.form['a']
+
         expire = request.form['expire']
         registered = request.form['registered']
 
         conn = get_db_connection()
-        conn.execute('INSERT INTO books (title, author, bureau, user, contact, media, risk, c, i, a, expire, registered) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (title, author, bureau, user, contact, media, risk, c, i, a, expire, registered))
+        # ? makes flask sanitising the query
+        conn.execute('INSERT INTO book (category, name, note, user, bureau, charge, contact, media, importance, c, i, a, expire, registered) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (category, name, note, user, bureau, charge, contact, media, importance, c, i, a, expire, registered))
         conn.commit()
         conn.close()
-        return redirect('/books')
-    return render_template('add_book.html')
+        return redirect('/')
+    return render_template('add_asset.html')
 
-# 本の一覧表示
-@app.route('/books')
-def book_list():
+# 一覧表示
+@app.route('/')
+def asset_list():
     conn = get_db_connection()
-    books = conn.execute('SELECT * FROM books').fetchall()
+    book = conn.execute('SELECT * FROM book').fetchall()
     conn.close()
-    return render_template('book_list.html', books=books)
+    return render_template('assets_list.html', book=book)
 
-# 本の削除機能
-@app.route('/delete-book/<int:id>', methods=['POST'])
-def delete_book(id):
+# 削除機能
+@app.route('/delete-asset/<int:id>', methods=['POST'])
+def delete_asset(id):
     conn = get_db_connection()
-    conn.execute('DELETE FROM books WHERE id = ?', (id,))
+    conn.execute('DELETE FROM book WHERE id = ?', (id,))
     conn.commit()
     conn.close()
-    return redirect('/books')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)
