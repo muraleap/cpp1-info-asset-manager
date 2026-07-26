@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>情報資産の追加</h1>
+        <form action="/add-asset" method="POST">
+
+            <label for="category ">業務分類：</label>
+            <input type="text" id="category" name="category" required>
+
+            <label for="name">資産名称：</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="note">備考：</label>
+            <input type="text" id="note" name="note" required>
+            
+            <label for="user">利用者範囲：</label>
+            <input type="text" id="user" name="user" required>
+
+            <label for="bureau">管理部署：</label>
+            <input type="text" id="bureau" name="bureau" required>
+            
+            <label for="charge">管理者名：</label>
+            <input type="text" id="charge" name="charge" required>
+            
+            <label for="contact">管理者連絡先：</label>
+            <input type="text" id="contact" name="contact" required>
+
+            <label for="media">媒体・保存先：</label>
+            <input type="text" id="media" name="media" required>
+            
+            <label for="importance">重要度：</label>
+            <input type="radio" value="1" id="importance" name="importance" required>
+            <input type="radio" value="2" id="importance" name="importance" required>
+            <input type="radio" value="3" id="importance" name="importance" required>
+            
+            <label for="c">機密性：</label>
+            <input type="radio" value="1" id="c" name="c" required>
+            <input type="radio" value="2" id="c" name="c" required>
+            <input type="radio" value="3" id="c" name="c" required>
+            
+            <label for="i">完全性：</label>
+            <input type="radio" value="1" id="i" name="i" required>
+            <input type="radio" value="2" id="i" name="i" required>
+            <input type="radio" value="3" id="i" name="i" required>
+            
+            <label for="a">可用性：</label>
+            <input type="radio" value="1" id="a" name="a" required>
+            <input type="radio" value="2" id="a" name="a" required>
+            <input type="radio" value="3" id="a" name="a" required>
+            
+            <label for="expire">保存期限：</label>
+            <input type="text" id="expire" name="expire" required>
+            
+            <label for="registered">登録日：</label>
+            <input type="text" id="registered" name="registered" required>
+
+            <button type="submit">資産を追加する</button>
+        </form>
+        <a href="/" class="btn-back">情報資産一覧に戻る</a>
+    </div>
+</body>
+</html>
+
