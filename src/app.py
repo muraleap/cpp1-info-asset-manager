@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
+from hashlib import sha256
 
 app = Flask(__name__)
 
@@ -8,6 +9,13 @@ def get_db_connection():
     conn = sqlite3.connect('book.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+
+# 認証データベース接続関数
+def get_auth_db_connection():
+    auth_db_connection = sqlite3.connect('auth.db')
+    auth_db_connection.row_factory = sqlite3.Row
+    return auth_db_connection
 
 # 初回リクエスト時にテーブルを作成
 with app.app_context():
@@ -35,6 +43,18 @@ with app.app_context():
     ''')
     conn.commit()
     conn.close()
+
+    #認証データベースのテーブルを作成
+    auth_db_connection = get_auth_db_connection()
+    auth_db_connection.execute('''
+            create table if not exists auth (
+                id integer primary key autoincrement,
+                username text not null,
+                pwd_hash text not null
+            )
+    ''')
+    auth_db_connection.commit()
+    auth_db_connection.close()
 
 # 追加画面
 @app.route('/add-asset', methods=['GET', 'POST'])
@@ -83,6 +103,19 @@ def delete_asset(id):
     conn.commit()
     conn.close()
     return redirect('/')
+
+#アカウント登録
+@app.route('/register', methods=['POST'])
+def add_account():
+    #ユーザネーム
+    username = request.form['username']
+    #パスワード
+    pwd = request.form['pwd']
+
+    #パスワードハッシュ
+    pwd_hash = hashlib.sha256(pwd.encode('ASCII')).hexdigest()
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
