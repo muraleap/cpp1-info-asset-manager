@@ -1,10 +1,6 @@
-FROM python:3
-RUN mkdir /app
+FROM python:3.9-slim
 WORKDIR /app
-VOLUME /app
-COPY requirements.txt /app
+COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY . /app
-EXPOSE 5000
 CMD ["python", "app.py"]

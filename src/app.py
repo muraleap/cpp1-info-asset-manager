@@ -115,8 +115,9 @@ def add_account():
     #パスワードハッシュ
     pwd_hash = hashlib.sha256(pwd.encode('ASCII')).hexdigest()
 
-    
+    auth_db_connection = get_auth_db_connection()
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000 ,debug=True)
 
