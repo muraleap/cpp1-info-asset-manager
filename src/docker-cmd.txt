@@ -1,1 +1,2 @@
+docker build -t beginners-johoshisan .
 docker run -v app:/app --rm beginners-johoshisan
