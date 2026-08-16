@@ -1,15 +1,66 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
-from hashlib import sha256
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///auth.db'
+
+app.config['SECRET_KEY'] = os.urandom(24)
+db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+login_manager.login_view = 'login'
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False, unique=True)
+    password = db.Column(db.String(50))
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == "POST":
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # Userのインスタンスを作成
+        user = User(username=username, password=generate_password_hash(password, method='scrypt'))
+        db.session.add(user)
+        db.session.commit()
+        return redirect('login')
+    else:
+        return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "POST":
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # Userテーブルからusernameに一致するユーザを取得
+        user = User.query.filter_by(username=username).first()
+        if check_password_hash(user.password, password):
+            login_user(user)
+            return redirect('/')
+    else:
+        return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('login')
 
 # データベース接続関数
 def get_db_connection():
     conn = sqlite3.connect('book.db')
     conn.row_factory = sqlite3.Row
     return conn
-
 
 # 認証データベース接続関数
 def get_auth_db_connection():
@@ -43,21 +94,12 @@ with app.app_context():
     ''')
     conn.commit()
     conn.close()
-
-    #認証データベースのテーブルを作成
-    auth_db_connection = get_auth_db_connection()
-    auth_db_connection.execute('''
-            create table if not exists auth (
-                id integer primary key autoincrement,
-                username text not null,
-                pwd_hash text not null
-            )
-    ''')
-    auth_db_connection.commit()
-    auth_db_connection.close()
-
+    
+    db.create_all()
+    
 # 追加画面
 @app.route('/add-asset', methods=['GET', 'POST'])
+@login_required
 def add_book():
     if request.method == 'POST':
         #追加内容
@@ -89,6 +131,7 @@ def add_book():
 
 # 一覧表示
 @app.route('/')
+@login_required
 def asset_list():
     conn = get_db_connection()
     book = conn.execute('SELECT * FROM book').fetchall()
@@ -103,20 +146,6 @@ def delete_asset(id):
     conn.commit()
     conn.close()
     return redirect('/')
-
-#アカウント登録
-@app.route('/register', methods=['POST'])
-def add_account():
-    #ユーザネーム
-    username = request.form['username']
-    #パスワード
-    pwd = request.form['pwd']
-
-    #パスワードハッシュ
-    pwd_hash = hashlib.sha256(pwd.encode('ASCII')).hexdigest()
-
-    auth_db_connection = get_auth_db_connection()
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000 ,debug=True)
