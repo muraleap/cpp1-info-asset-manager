@@ -20,7 +20,7 @@
             <input type="text" id="name" name="name" required>
 
             <label for="note">備考：</label>
-            <input type="text" id="note" name="note" required>
+            <input type="text" id="note" name="note">
 
             <label for="user">利用者範囲：</label>
             <input type="text" id="user" name="user" required>
@@ -37,28 +37,34 @@
             <label for="media">媒体・保存先：</label>
             <input type="text" id="media" name="media" required>
 
-            <label for="importance">重要度：</label>
-            <input type="text" id="media" name="media" required>
-
             <label for="c">機密性：</label>
-            <input type="text" id="c" name="c" required>
-
+            <input type="number" id="c" name="c" min="1" max="3" required>
+            <p>1. 漏洩しても影響は軽微</p>
+            <p>2. 漏洩すると自社／顧客に大きな影響</p>
+            <p>3. 漏洩すると違法／契約違反／保護義務違反</p>
+            <br>
 
             <label for="i">完全性：</label>
-            <input type="text" id="i" name="i" required>
-
+            <input type="number" id="i" name="i" min="1" max="3" required>
+            <p>1. 改ざんされても影響は軽微</p>
+            <p>2. 改ざんされると自社／顧客に大きな影響</p>
+            <p>3. 改ざんされると違法／契約違反／深刻な影響</p>
+            <br>
 
             <label for="a">可用性：</label>
-            <input type="text" id="a" name="a" required>
-
+            <input type="number" id="a" name="a" min="1" max="3" required>
+            <p>1. 利用できなくても影響は軽微</p>
+            <p>2. 利用できないと事業に大きな影響</p>
+            <p>3. 利用できないと自社／顧客に深刻な損失（例：ECサイト）</p>
+            <br>
 
             <label for="expire">保存期限：</label>
-            <input type="text" id="expire" name="expire" required>
+            <input type="date" id="expire" name="expire"  required>
 
             <label for="registered">登録日：</label>
-            <input type="text" id="registered" name="registered" required>
+            <input type="date" id="registered" name="registered" required>
 
-            <button type="submit">資産を追加する</button>
+            <button id="submit" type="submit">資産を追加する</button>
         </form>
         <a href="/" class="btn-back">情報資産一覧に戻る</a>
     </div>

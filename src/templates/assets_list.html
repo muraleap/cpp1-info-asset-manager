@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
+    <header>
+        <h1>はじめての情報資産管理台帳</h1>
+    </header>
     <div class="container">
-        <h1>情報資産一覧</h1>
+        <h2>情報資産一覧</h2>
         <div class="table-wrapper">
         <table>
             <thead>
@@ -45,7 +48,7 @@
                     <td>{{ asset.contact }}</td>
                     <td>{{ asset.media }}</td>
 
-                    <td>{{ asset.importance }}</td>
+                    <td><b>{{ asset.importance }}</b></td>
                     <td>{{ asset.c }}</td>
                     <td>{{ asset.i }}</td>
                     <td>{{ asset.a }}</td>

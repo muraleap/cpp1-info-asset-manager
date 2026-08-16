@@ -71,10 +71,10 @@ def add_book():
         contact = request.form['contact']
         media = request.form['media']
 
-        importance = request.form['importance']
         c = request.form['c']
         i = request.form['i']
         a = request.form['a']
+        importance = max(c, i, a)
 
         expire = request.form['expire']
         registered = request.form['registered']

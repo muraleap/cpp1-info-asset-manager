@@ -112,3 +112,14 @@ tr:hover {
     background-color: #218838;
 }
 
+#submit {
+    margin-top: 1em;
+}
+
+#expire, #registered {
+    padding: 1em;
+}
+
+#c, #i, #a {
+    padding: 1em;
+}
